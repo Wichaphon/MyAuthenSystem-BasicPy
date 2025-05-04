@@ -1,9 +1,16 @@
 version: '3'
 
 services:
-  my_authen_api:
-    container_name: my_authen_api
-    build: ./backend
-    image: my_authen_api_image
+  # my_authen_api:
+  #   container_name: my_authen_api
+  #   build: ./backend
+  #   image: my_authen_api_image
+  #   ports:
+  #     - "30002:5000"
+
+  frontend:
+    build: ./frontend
     ports:
-      - "30002:5000"
+      - "30001:5000"
+    volumes:
+      - ./frontend:/app
