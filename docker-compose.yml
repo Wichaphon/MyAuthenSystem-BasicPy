@@ -21,5 +21,18 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  my_authen_web:
+    build: ./frontend
+    container_name: my_authen_web
+    ports:
+      - "30001:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - my_authen_api
+
 volumes:
   pgdata:
+
+  

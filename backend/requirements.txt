@@ -3,3 +3,4 @@ psycopg2-binary
 pycryptodome
 python-dotenv
 PyJWT==2.8.0
+flask-cors
