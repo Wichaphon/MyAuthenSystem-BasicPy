@@ -1,8 +1,13 @@
-FROM python:3.10-slim
+# C:\MyProject\AuthenLoginPy\MyAuthenSystem-BasicPy\backend\Dockerfile
+
+FROM node:18
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+COPY package*.json ./
+RUN npm install
+
 COPY . .
 
-CMD [ "python" , "app.py"]
+RUN npm run build
+
+CMD ["node", "dist/main"]
