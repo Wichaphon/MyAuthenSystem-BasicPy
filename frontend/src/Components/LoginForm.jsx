@@ -1,5 +1,6 @@
 import React,{ useState } from "react";
 import './LoginForm.css';
+import { FaUserCircle , FaLock } from "react-icons/fa";
 
 export default function LoginForm() {
 
@@ -10,7 +11,7 @@ export default function LoginForm() {
         e.preventDefault(); //กันไม่ให้ <form> โหลดหน้าเว็บใหม่
 
             try {
-          const res = await fetch("http://localhost:30002/login", {
+          const res = await fetch("http://localhost:30002/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
@@ -37,12 +38,17 @@ export default function LoginForm() {
                 <h1 className="Header-login"> Login </h1>
                 <div className="input-form">
                     <input type="text" placeholder="Username" onChange={(e) => {setUsername(e.target.value)}}></input>
+                    <FaUserCircle className="icon"/>
                 </div>
                 <div className="input-form">
                     <input type="password" placeholder="Password" onChange={(e) => {setPassword(e.target.value)}}></input>
+                    <FaLock className="icon"/>
+                </div>
+                <div className="Remember">
+                    <label><input type="checkbox"/>Remember me</label>
                 </div>
                 <div>
-                    <button type="submit">Login</button>
+                    <button type="submit">Login</button>    
                 </div>
             </form>
         </div>
