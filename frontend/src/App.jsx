@@ -1,11 +1,11 @@
 import './App.css'
-import LoginForm from './Components/LoginForm'
-
+import LoginForm from './pages/Login'
+import AppRoutes from './routes/AppRoutes';
 export default function App() {
 
   return (
     <>
-      <LoginForm/>
+      <AppRoutes />
     </>
       
   )

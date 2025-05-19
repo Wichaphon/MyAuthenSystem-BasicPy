@@ -1,13 +1,13 @@
 
-FROM node:18
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
+# FROM node:18
+# WORKDIR /app
+# COPY package*.json ./
+# RUN npm install
 
-COPY . .
+# COPY . .
 
-EXPOSE 5173
-CMD ["npm", "run", "dev"]
+# EXPOSE 5173
+# CMD ["npm", "run", "dev"]
 
 # FROM node:18
 # WORKDIR /app/frontend
@@ -16,4 +16,18 @@ CMD ["npm", "run", "dev"]
 # COPY frontend ./
 # EXPOSE 5173
 # CMD ["npm", "run", "dev"]
+
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host"]
+
 
