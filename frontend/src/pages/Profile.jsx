@@ -5,6 +5,7 @@ import "./Profile.css";
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,17 +23,15 @@ const Profile = () => {
           },
         });
 
-        if (res.status === 401) {
-          throw new Error("Token expired or invalid");
-        }
+        if (!res.ok) throw new Error("Invalid token");
 
         const data = await res.json();
         setUser(data);
       } catch (err) {
-        // redirect ถ้า token หมดอายุหรือผิด
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        localStorage.clear();
         navigate("/");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -40,24 +39,25 @@ const Profile = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.clear();
     navigate("/");
   };
 
-  if (!user) return <p className="loading-text">Loading...</p>;
+  if (loading) return <p className="loading-text">Loading...</p>;
+
+  if (!user) return null;
 
   return (
-    <div className="profile-container">
-      <button className="logout-btn" onClick={handleLogout}>
-        Logout
-      </button>
-      <div className="profile-card">
-        <img src={user.picture} alt="Profile" className="profile-pic" />
-        <h2>{user.myname}</h2>
-        <p>{user.myposition}</p>
-      </div>
-    </div>
+    <div className="profile-page">
+  <div className="profile-card">
+    <img src={user.picture} alt="Profile" className="profile-pic" />
+    <h2>{user.myname}</h2>
+    <p>{user.myposition}</p>
+    <button className="logout-btn" onClick={handleLogout}>
+      Logout
+    </button>
+  </div>
+</div>
   );
 };
 
