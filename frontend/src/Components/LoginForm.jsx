@@ -1,11 +1,13 @@
 import React,{ useState } from "react";
 import './LoginForm.css';
+import {Link, useNavigate} from 'react-router-dom'
 import { FaUserCircle , FaLock } from "react-icons/fa";
 
 export default function LoginForm() {
 
     const [username , setUsername] = useState('');
     const [password , setPassword] = useState('');
+    const navigate = useNavigate();
     
     const handleSubmit = async (e) => {
         e.preventDefault(); //กันไม่ให้ <form> โหลดหน้าเว็บใหม่
@@ -19,13 +21,12 @@ export default function LoginForm() {
     
           const data = await res.json();
     
-          if (data.status === "success") {
-            alert("Login success!");
-            console.log("Token:", data.token);
-            // เก็บ token ไว้ใน localStorage หรือจะเอาไปใช้ต่อก็ได้...
-            // localStorage.setItem("token", data.token);
+          if (res.ok && data.status === "success") {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.data));
+            navigate("/profile");
           } else {
-            alert("Login failed: " + data.message);
+            alert("Login failed: " +(data.message || "Unknow error"));
           }
         } catch (err) {
           alert("Error: " + err.message);
@@ -33,7 +34,7 @@ export default function LoginForm() {
       };
 
     return (
-        <div>
+        <div className="Box">
             <form className="input-content" action="" onSubmit={handleSubmit}>
                 <h1 className="Header-login"> Login </h1>
                 <div className="input-form">
@@ -49,6 +50,10 @@ export default function LoginForm() {
                 </div>
                 <div>
                     <button type="submit">Login</button>    
+                </div>
+                <div className="Register-link">
+                    <p>Don't have an account? <Link to="/register"> Register</Link>
+                        </p>
                 </div>
             </form>
         </div>
