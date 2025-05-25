@@ -17,7 +17,7 @@ const ProfilePage = () => {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:30002/auth/profile", {
+        const res = await fetch("/auth/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

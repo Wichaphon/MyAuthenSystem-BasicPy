@@ -19,7 +19,7 @@ export default function LoginForm() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:30002/auth/login", {
+      const res = await fetch("/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
