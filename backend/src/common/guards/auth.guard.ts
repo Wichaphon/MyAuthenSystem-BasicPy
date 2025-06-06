@@ -13,7 +13,7 @@ const JWT_SECRET = process.env.JWT_SECRET_KEY || 'PeatfullySecret9999';
 @Injectable()
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<Request & { user?: JwtPayload }>();
     const authHeader = request.headers['authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-      request.user = decoded;
+      request.user = decoded; // Attach payload to req.user
       return true;
     } catch (err) {
       throw new UnauthorizedException('Invalid or expired token');

@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Role } from '../roles/role.entity';
 
 @Entity('users')
 export class User {
@@ -20,6 +27,13 @@ export class User {
   @Column()
   picture: string;
 
+  @Column({ nullable: true })
+  address: string;
+
+  @ManyToOne(() => Role, role => role.users)
+  @JoinColumn({ name: 'role_id' }) 
+  role: Role;
+
   @Column({ type: 'timestamp' })
   create_datetime: Date;
 
@@ -32,5 +46,3 @@ export class User {
   @Column()
   update_by: string;
 }
-
-export default User;

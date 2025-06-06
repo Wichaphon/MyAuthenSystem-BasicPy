@@ -3,8 +3,7 @@ services:
     container_name: my_authen_api
     build: ./backend
     image: my_authen_api_image
-    ports:
-      - "30002:5000"
+    
     depends_on:
       - db
 
@@ -24,8 +23,7 @@ services:
   my_authen_web:
     container_name: my_authen_web
     build: ./frontend
-    ports:
-      - "30001:3000"
+    
     volumes:
       - ./frontend:/app
       - /app/node_modules
