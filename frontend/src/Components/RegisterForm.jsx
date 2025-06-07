@@ -26,7 +26,7 @@ export default function RegisterForm(){
     });
 
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: 'AIzaSyDrIITkhW7h2Mc5kLsB1eGBFnBeixak9A8',
+        googleMapsApiKey: '',
         libraries: ['places']
     });
 
