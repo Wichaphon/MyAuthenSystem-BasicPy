@@ -1,6 +1,6 @@
 FROM node
 WORKDIR /app
-COPY package*.json ./
+COPY pakage*.json ./
 RUN npm install
 COPY . .
 EXPOSE 5173
