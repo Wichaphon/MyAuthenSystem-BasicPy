@@ -7,9 +7,7 @@ services:
     image: my_authen_api_image
     ports:
       - "30002:5000"
-    depends_on:
-      - db
-
+    
   db:
     container_name: postgres_db
     image: postgres:15
@@ -24,8 +22,8 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   my_authen_web:
-    container_name: my_authen_web
     build: ./frontend
+    container_name: my_authen_web
     ports:
       - "30001:5173"
     volumes:
@@ -36,3 +34,4 @@ services:
 
 volumes:
   pgdata:
+
