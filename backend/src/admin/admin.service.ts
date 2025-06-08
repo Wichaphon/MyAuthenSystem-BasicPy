@@ -12,7 +12,12 @@ export class AdminService {
   ) {}
 
   async getAllUsers() {
-    const users = await this.userRepo.find({ relations: ['role'] });
+    const users = await this.userRepo.find({ 
+      relations: ['role'],
+      order : {
+        id: 'ASC',
+      },
+    });
     return users.map(user => ({
       id: user.id,
       name: user.myname,
