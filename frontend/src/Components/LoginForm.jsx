@@ -13,7 +13,7 @@ export default function LoginForm() {
         e.preventDefault(); //กันไม่ให้ <form> โหลดหน้าเว็บใหม่
 
             try {
-          const res = await fetch("http://localhost:30002/auth/login", {
+          const res = await fetch("http://localhost/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
