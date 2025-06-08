@@ -1,5 +1,12 @@
 // src/admin/admin.controller.ts
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Delete,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -19,4 +26,11 @@ export class AdminController {
       users,
     };
   }
+
+  @Delete('user/:id')
+  @Roles('admin')
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.adminService.deleteUser(id);
+  }
 }
+

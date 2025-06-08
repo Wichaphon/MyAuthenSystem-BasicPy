@@ -1,5 +1,8 @@
 // src/admin/admin.service.ts
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
 import { Repository } from 'typeorm';
@@ -12,9 +15,9 @@ export class AdminService {
   ) {}
 
   async getAllUsers() {
-    const users = await this.userRepo.find({ 
+    const users = await this.userRepo.find({
       relations: ['role'],
-      order : {
+      order: {
         id: 'ASC',
       },
     });
@@ -26,4 +29,15 @@ export class AdminService {
       picture: user.picture,
     }));
   }
+
+  async deleteUser(id: number) {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.userRepo.remove(user);
+    return { status: 'success', message: 'User deleted successfully' };
+  }
 }
+
