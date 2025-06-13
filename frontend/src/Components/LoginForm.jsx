@@ -34,7 +34,7 @@ export default function LoginForm() {
       };
 
     return (
-        <div className="Box">
+        <div className="Login-Box">
             <form className="input-content" action="" onSubmit={handleSubmit}>
                 <h1 className="Header-login"> Login </h1>
                 <div className="input-form">
