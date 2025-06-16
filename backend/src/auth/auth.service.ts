@@ -54,7 +54,7 @@ export class AuthService {
     return {
       status: 'success',
       token,
-      data: payload,
+      role: user.role?.name, 
     };
   }
 
@@ -75,10 +75,8 @@ export class AuthService {
       throw new BadRequestException('Default role not found');
     }
 
-    //ตรวจสอบไฟล์,อัปโหลด
     validateImageFile(file);
     const imageUrl = await uploadImageToGCS(file);
-
     const encryptedPassword = encryptPassword(dto.password);
 
     const newUser = this.userRepo.create({

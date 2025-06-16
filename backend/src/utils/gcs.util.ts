@@ -22,7 +22,7 @@ export async function uploadImageToGCS(file: Express.Multer.File): Promise<strin
 
   const stream = blob.createWriteStream({
     resumable: false,
-    contentType: file.mimetype, 
+    contentType: file.mimetype,
   });
 
   return new Promise((resolve, reject) => {
@@ -35,4 +35,21 @@ export async function uploadImageToGCS(file: Express.Multer.File): Promise<strin
 
     stream.end(file.buffer);
   });
+}
+
+/**
+ * Deletes an image from Google Cloud Storage using its public URL.
+ * @param imageUrl Public URL of the image to delete
+ */
+
+export async function deleteImageFromGCS(imageUrl: string): Promise<void> {
+  try {
+    const prefix = `https://storage.googleapis.com/${bucketName}/`;
+    if (!imageUrl.startsWith(prefix)) return;
+
+    const filePath = imageUrl.substring(prefix.length); 
+    await bucket.file(filePath).delete();
+  } catch (err) {
+    console.error('Failed to delete image from GCS:', err.message);
+  }
 }

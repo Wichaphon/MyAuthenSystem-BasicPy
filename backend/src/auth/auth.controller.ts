@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { JwtPayload } from '../types/jwt-payload';
 import { validateImageFile } from '../utils/file-validator.util'; 
+import { convertImageUrlToBase64 } from '../utils/image.util'; 
 
 @Controller('auth')
 export class AuthController {
@@ -42,12 +43,15 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Req() req: Request) {
+  async getProfile(@Req() req: Request) {
     const user = req.user as JwtPayload;
+
+    const base64Image = await convertImageUrlToBase64(user.picture);
+
     return {
       myname: user.myname,
       myposition: user.myposition,
-      picture: user.picture,
+      picture: base64Image, //ส่งbase64 แทน URL
       role: user.role,
       address: user.address,
     };
