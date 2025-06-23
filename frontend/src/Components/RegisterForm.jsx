@@ -145,6 +145,7 @@ export default function RegisterForm() {
   };
 
   return isLoaded ? (
+    <div className="register-page">
     <div className="Box">
       <form className="input-content" onSubmit={handleSubmit} encType="multipart/form-data">
         <h1 className="Header">Register</h1>
@@ -186,6 +187,7 @@ export default function RegisterForm() {
           <p>Already have an account? <Link to="/">Login</Link></p>
         </div>
       </form>
+    </div>
     </div>
   ) : <div>Loading map...</div>;
 }

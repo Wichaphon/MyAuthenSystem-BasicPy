@@ -34,6 +34,7 @@ export default function LoginForm() {
       };
 
     return (
+        <div className="login-page">
         <div className="Box">
             <form className="input-content" action="" onSubmit={handleSubmit}>
                 <h1 className="Header-login"> Login </h1>
@@ -57,5 +58,6 @@ export default function LoginForm() {
                 </div>
             </form>
         </div>
+      </div>
     )
 }
