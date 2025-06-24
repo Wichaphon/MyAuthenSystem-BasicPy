@@ -2,10 +2,10 @@ import "./AdminSidebar.css";
 import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineSettings } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
-
-import { useLocation } from "react-router-dom";
+import { useLocation , useNavigate } from "react-router-dom";
 
 function AdminSidebar() {
+  const navigate = useNavigate();
   const location = useLocation();
   const menuBar = [
     {
@@ -21,6 +21,11 @@ function AdminSidebar() {
       path: "/dashboard/settings",
     },
   ];
+
+  const handleLogout = () =>{
+        localStorage.clear();
+        navigate("/");
+    };
   return (
     <div className="content">
       <div className="sidebar-top">
@@ -44,13 +49,13 @@ function AdminSidebar() {
         </div>
       </div>
 
-      <div className="logout-section">
-        <li className="menu-item">
+      <div className="logout-section" onClick={handleLogout}>
+        <span className="menu-item">
           <span className="icon-bar">
             <LuLogOut size={20} />
           </span>
           <span>Log out</span>
-        </li>
+        </span>
       </div>
     </div>
   );
