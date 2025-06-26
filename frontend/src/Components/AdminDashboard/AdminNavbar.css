@@ -46,3 +46,41 @@
   border-radius: 8px;
   margin-top: 2px;
 }
+
+/* ============================= */
+/* SKELETON LOADING ANIMATION 🦴 */
+/* ============================= */
+
+.skeleton {
+  background-color: #e2e8f0;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  margin-right: 15px;
+}
+
+.skeleton-name {
+  width: 120px;
+  height: 18px;
+  margin-bottom: 6px;
+}
+
+.skeleton-role {
+  width: 70px;
+  height: 14px;
+  border-radius: 10px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}

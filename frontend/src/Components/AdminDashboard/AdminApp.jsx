@@ -10,14 +10,45 @@ import "react-toastify/dist/ReactToastify.css";
 function AdminApp() {
   const navigate = useNavigate();
 
-  const user = {
-    myname: "Wichaphon BtoX",
-    myposition: "Intern Programmer",
-    picture:
-      "https://storage.googleapis.com/my-app-bucket-2025/wichaphon001.png",
-    role: "admin",
-    address: "99/104 test test",
-  };
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/");
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost/auth/profile", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem("token");
+          navigate("/");
+          return;
+        }
+
+        const data = await res.json();
+        if (data && data.myname) {
+          setUserProfile(data);
+        } else {
+          console.error("Invalid profile response:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        navigate("/");
+      }
+    };
+
+    fetchProfile();
+  }, [navigate]);
 
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,7 +97,7 @@ function AdminApp() {
     <div className="sidebar-container">
       <AdminSidebar />
       <div className="navbar-content">
-        <AdminNavbar user={user} />
+        <AdminNavbar user={userProfile} />
       </div>
 
       <div className="users-content">

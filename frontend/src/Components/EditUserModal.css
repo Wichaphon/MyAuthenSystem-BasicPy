@@ -1,0 +1,107 @@
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 420px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.modal h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  color: #222;
+  margin-bottom: 2rem;
+}
+
+.modal h2 .highlight {
+  color: #7f3eff;
+  font-weight: 700;
+}
+
+.modal label {
+  display: block;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.4rem;
+  margin-top: 1.2rem;
+}
+
+.modal .field-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.modal .field-row input,
+.modal .field-row select {
+  flex: 2;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+
+.modal .field-row input:focus,
+.modal .field-row select:focus {
+  border-color: #7f3eff;
+  outline: none;
+}
+
+.modal .field-row button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  background-color: #7f3eff;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal .field-row button:hover {
+  background-color: #652ed1;
+}
+
+.modal .field-row button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.modal .btn-close {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.modal .btn-close button {
+  padding: 0.6rem 1.5rem;
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal .btn-close button:hover {
+  background-color: #ddd;
+}
