@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react"; 
+import { useState, useEffect, useCallback } from "react";
 import { FaUserFriends } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -8,6 +8,7 @@ import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import EditUserModal from "../EditUserModal";
 
 function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
+  const [searching, setSearching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [deletedIds, setDeletedIds] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,49 +23,60 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
 
   const filteredUsers = Array.isArray(allUsers)
     ? allUsers.filter((u) => {
-        if (!u || typeof u.id === 'undefined' || deletedIds.includes(u.id)) {
-            if (!u) console.warn("Filtered out a null/undefined user from allUsers.");
-            else if (typeof u.id === 'undefined') console.warn("Filtered out user without 'id':", u);
-            return false;
+        if (!u || typeof u.id === "undefined" || deletedIds.includes(u.id)) {
+          if (!u)
+            console.warn("Filtered out a null/undefined user from allUsers.");
+          else if (typeof u.id === "undefined")
+            console.warn("Filtered out user without 'id':", u);
+          return false;
         }
         return true;
-    })
+      })
     : [];
 
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / usersPerPage));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredUsers.length / usersPerPage)
+  );
 
   const handleDeleteClick = useCallback((user) => {
-    if (!user || typeof user.id === 'undefined') {
-        console.error("Error: User object for delete is invalid or missing ID.", user);
-        toast.error("Cannot delete: Invalid user data.");
-        return;
+    if (!user || typeof user.id === "undefined") {
+      console.error(
+        "Error: User object for delete is invalid or missing ID.",
+        user
+      );
+      toast.error("Cannot delete: Invalid user data.");
+      return;
     }
     setSelectedUser(user);
     setIsModalOpen(true);
-  }, []); 
+  }, []);
 
   const handleEditClick = useCallback((user) => {
-    if (!user || typeof user.id === 'undefined') {
-        console.error("Error: User object for edit is invalid or missing ID.", user);
-        toast.error("Cannot edit: Invalid user data.");
-        return;
+    if (!user || typeof user.id === "undefined") {
+      console.error(
+        "Error: User object for edit is invalid or missing ID.",
+        user
+      );
+      toast.error("Cannot edit: Invalid user data.");
+      return;
     }
     console.log("✨ AdminAllUsers: handleEditClick called with user:", user);
     setEditUser(user);
     setEditOpen(true);
-  }, []); 
+  }, []);
 
   const handleConfirmDelete = async (id) => {
     const token = localStorage.getItem("token");
     if (!token) {
-        toast.error("No token found");
-        return;
+      toast.error("No token found");
+      return;
     }
-    if (typeof id === 'undefined' || id === null) {
-        console.error("Error: Cannot confirm delete, user ID is missing.");
-        toast.error("Delete failed: User ID is missing.");
-        return;
+    if (typeof id === "undefined" || id === null) {
+      console.error("Error: Cannot confirm delete, user ID is missing.");
+      toast.error("Delete failed: User ID is missing.");
+      return;
     }
 
     try {
@@ -81,7 +93,9 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
       }
 
       if (!res.ok) {
-        const errorData = await res.json().catch(() => ({ message: "Unknown error" }));
+        const errorData = await res
+          .json()
+          .catch(() => ({ message: "Unknown error" }));
         throw new Error(errorData.message || "Network response was not ok");
       }
 
@@ -105,55 +119,6 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
       });
 
       if (res.status === 401 || res.status === 403) {
-          toast.error("Session expired. Please log in again.");
-          localStorage.clear();
-          window.location.href = "/";
-          return;
-      }
-
-      if (!res.ok) {
-          const errorData = await res.json().catch(() => ({ message: "Failed to fetch users" }));
-          throw new Error(errorData.message || "Network response was not ok");
-      }
-
-      const data = await res.json();
-
-      if (Array.isArray(data.users)) {
-        const validUsers = data.users.filter((u) => {
-            if (!u || typeof u.id === 'undefined') {
-                return false;
-            }
-            return true;
-        });
-        setAllUsers(validUsers);
-      } else {
-        setAllUsers([]); 
-      }
-    } catch (error) {
-      console.error("Failed to fetch all users:", error);
-      toast.error(`Failed to load users: ${error.message || "Unknown error"}`);
-      setAllUsers([]); 
-    } finally {
-
-    }
-  }, [setAllUsers]); 
-
-  const performSearch = useCallback(async (keyword) => {
-    if (!keyword.trim()) {
-      fetchAllUsers(); 
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    try {
-      const res = await fetch(
-        `http://localhost/admin/search?keyword=${encodeURIComponent(keyword)}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (res.status === 401 || res.status === 403) {
         toast.error("Session expired. Please log in again.");
         localStorage.clear();
         window.location.href = "/";
@@ -161,62 +126,133 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
       }
 
       if (!res.ok) {
-          const errorData = await res.json().catch(() => ({ message: "Search failed" }));
-          throw new Error(errorData.message || "Network response was not ok");
+        const errorData = await res
+          .json()
+          .catch(() => ({ message: "Failed to fetch users" }));
+        throw new Error(errorData.message || "Network response was not ok");
       }
 
       const data = await res.json();
 
-      const usersArr = Array.isArray(data.users) ? data.users : [];
-      const validUsers = usersArr.filter((u) => {
-          if (!u || typeof u.id === 'undefined') {
-              return false;
+      if (Array.isArray(data.users)) {
+        const validUsers = data.users.filter((u) => {
+          if (!u || typeof u.id === "undefined") {
+            return false;
           }
           return true;
-      });
-      setAllUsers(validUsers);
-      setCurrentPage(1);
-
-      if (validUsers.length === 0) toast.info("No users found matching your search.");
+        });
+        setAllUsers(validUsers);
+      } else {
+        setAllUsers([]);
+      }
     } catch (error) {
-      console.error("Search failed:", error);
-      toast.error(`Search failed: ${error.message || "Unknown error"}`);
-      setAllUsers([]); 
+      console.error("Failed to fetch all users:", error);
+      toast.error(`Failed to load users: ${error.message || "Unknown error"}`);
+      setAllUsers([]);
     } finally {
     }
-  }, [fetchAllUsers, setAllUsers]); 
+  }, [setAllUsers]);
 
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      performSearch(searchTerm);
-    }
-  }, [performSearch, searchTerm]); 
+  const performSearch = useCallback(
+    async (keyword) => {
+      if (!keyword.trim()) {
+        fetchAllUsers();
+        return;
+      }
 
-  const handleUserSaved = useCallback((updatedUser) => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
 
-    if (!updatedUser || typeof updatedUser.id === 'undefined') {
-        console.error("Error: updatedUser is invalid or missing ID:", updatedUser);
+      setSearching(true);
+
+      try {
+        const res = await fetch(
+          `http://localhost/admin/search?keyword=${encodeURIComponent(
+            keyword
+          )}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (res.status === 401 || res.status === 403) {
+          toast.error("Session expired. Please log in again.");
+          localStorage.clear();
+          window.location.href = "/";
+          return;
+        }
+
+        if (!res.ok) {
+          const errorData = await res
+            .json()
+            .catch(() => ({ message: "Search failed" }));
+          throw new Error(errorData.message || "Network response was not ok");
+        }
+
+        const data = await res.json();
+
+        const usersArr = Array.isArray(data.users) ? data.users : [];
+        const validUsers = usersArr.filter((u) => {
+          if (!u || typeof u.id === "undefined") {
+            return false;
+          }
+          return true;
+        });
+        setAllUsers(validUsers);
+        setCurrentPage(1);
+
+        if (validUsers.length === 0)
+          toast.info("No users found matching your search.");
+      } catch (error) {
+        console.error("Search failed:", error);
+        toast.error(`Search failed: ${error.message || "Unknown error"}`);
+        setAllUsers([]);
+      } finally {
+        setSearching(false);
+      }
+    },
+    [fetchAllUsers, setAllUsers]
+  );
+
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        performSearch(searchTerm);
+      }
+    },
+    [performSearch, searchTerm]
+  );
+
+  const handleUserSaved = useCallback(
+    (updatedUser) => {
+      if (!updatedUser || typeof updatedUser.id === "undefined") {
+        console.error(
+          "Error: updatedUser is invalid or missing ID:",
+          updatedUser
+        );
         toast.error("Update failed: Invalid user data returned.");
         setEditOpen(false);
         setEditUser(null);
         return;
-    }
+      }
 
-    setAllUsers((prev) => {
-      const newList = prev.map((u) => {
-        if (!u || typeof u.id === 'undefined') {
-          return null; 
-        }
-        return u.id === updatedUser.id ? updatedUser : u;
-      }).filter(Boolean); 
+      setAllUsers((prev) => {
+        const newList = prev
+          .map((u) => {
+            if (!u || typeof u.id === "undefined") {
+              return null;
+            }
+            return u.id === updatedUser.id ? updatedUser : u;
+          })
+          .filter(Boolean);
 
-      return newList;
-    });
+        return newList;
+      });
 
-    setEditOpen(false);
-    setEditUser(null);
-  }, [setAllUsers]); 
+      setEditOpen(false);
+      setEditUser(null);
+    },
+    [setAllUsers]
+  );
 
   if (loading) {
     return (
@@ -235,14 +271,22 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
         </span>
         <h2 id="Header">User Management</h2>
 
-        <input
-          className="search-box"
-          type="text"
-          placeholder="Search user..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+        <div className="search-wrapper">
+          {searching && (
+            <div className="search-loading">
+              <div className="custom-loader small" />
+              <span className="loading-msg">Searching…</span>
+            </div>
+          )}
+          <input
+            className="search-box"
+            type="text"
+            placeholder="Search user…"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
       </div>
 
       <table className="user-table">
@@ -258,7 +302,7 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
         </thead>
         <tbody>
           {currentUsers
-            .filter((u) => u && typeof u.id !== 'undefined') 
+            .filter((u) => u && typeof u.id !== "undefined")
             .map((u) => (
               <tr key={u.id}>
                 <td>
