@@ -27,7 +27,7 @@ export default function RegisterForm() {
   });
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyDrIITkhW7h2Mc5kLsB1eGBFnBeixak9A8',
+    googleMapsApiKey: '',
     libraries: ['places'],
   });
 
@@ -145,10 +145,9 @@ export default function RegisterForm() {
   };
 
   return isLoaded ? (
-    <div className="register-page">
-    <div className="Box">
+    <div className="Register-Box">
       <form className="input-content" onSubmit={handleSubmit} encType="multipart/form-data">
-        <h1 className="Header">Register</h1>
+        <h1 className="Header-Register">Register</h1>
 
         <div className="input-form">
           <input type="text" name="username" placeholder="Username" onChange={handleChange} required value={formData.username} />
@@ -160,9 +159,9 @@ export default function RegisterForm() {
 
         <div className="input-form">
           <input type="password" name="password" placeholder="Password" onChange={handleChange} required value={formData.password} />
-        </div>
 
-        <div>
+        </div>
+        <div className="file-input">
           <input type="file" name="picture" accept="image/png, image/jpg, image/jpeg" onChange={handleChange} required />
         </div>
 
@@ -176,7 +175,9 @@ export default function RegisterForm() {
           >
             {marker && <Marker position={marker} />}
           </GoogleMap>
-          <input name="address" value={formData.address} onChange={handleChange} readOnly required />
+          <div className="address-output">
+            <input name="address" value={formData.address} onChange={handleChange} readOnly required />
+          </div>
         </div>
 
         <div>
@@ -187,7 +188,6 @@ export default function RegisterForm() {
           <p>Already have an account? <Link to="/">Login</Link></p>
         </div>
       </form>
-    </div>
     </div>
   ) : <div>Loading map...</div>;
 }
