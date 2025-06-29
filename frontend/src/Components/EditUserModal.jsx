@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "./EditUserModal.css"; 
+import { BASE_API_URL } from "./config/api";
 
 function EditUserModal({ open, user, onClose, onSaved }) {
   const [form, setForm] = useState({
@@ -15,7 +16,7 @@ function EditUserModal({ open, user, onClose, onSaved }) {
 
   useEffect(() => {
     if (user && typeof user.id !== 'undefined') {
-      console.log("🔄 EditUserModal: Syncing form with user prop:", user);
+      console.log("EditUserModal: Syncing form with user prop:", user);
       setForm({
         username: user.username ?? "",
         myname: user.name ?? "", 
@@ -69,9 +70,8 @@ function EditUserModal({ open, user, onClose, onSaved }) {
         console.warn(`Attempted to save field '${fieldName}' but its value is undefined/null in form:`, form[fieldName]);
       }
 
-      console.log(`📡 EditUserModal: Sending PUT request to http://localhost/admin/user/${user.id} for field '${fieldName}'`);
 
-      const res = await fetch(`http://localhost/admin/user/${user.id}`, {
+      const res = await fetch(`${BASE_API_URL}/admin/user/${user.id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body,

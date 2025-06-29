@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import './RegisterForm.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { BASE_API_URL } from "./config/api";
 
 const containerStyle = {
   width: '100%',
@@ -123,7 +124,7 @@ export default function RegisterForm() {
     }
 
     try {
-      const response = await fetch('http://localhost/auth/register', {
+      const response = await fetch(`${BASE_API_URL}/auth/register`, {
         method: 'POST',
         body: data,
       });

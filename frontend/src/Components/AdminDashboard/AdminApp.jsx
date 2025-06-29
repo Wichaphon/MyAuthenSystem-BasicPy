@@ -6,6 +6,7 @@ import AdminNavbar from "./AdminNavbar";
 import AdminAllUsers from "./AdminAllUsers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BASE_API_URL } from "../config/api";
 
 function AdminApp() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function AdminApp() {
       }
 
       try {
-        const res = await fetch("http://localhost/auth/profile", {
+        const res = await fetch(`${BASE_API_URL}/auth/profile`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -62,7 +63,7 @@ function AdminApp() {
       }
 
       try {
-        const res = await fetch("http://localhost/admin/dashboard", {
+        const res = await fetch(`${BASE_API_URL}/admin/dashboard`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

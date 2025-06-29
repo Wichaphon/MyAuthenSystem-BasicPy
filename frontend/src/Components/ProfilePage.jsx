@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./ProfilePage.css"
+import { BASE_API_URL } from "./config/api";
 
 const ProfilePage = () =>{
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const ProfilePage = () =>{
 
         const fetchProfile = async () => {
             try {
-                const res = await fetch("http://localhost/auth/profile", {
+                const res = await fetch(`${BASE_API_URL}/auth/profile`, {
                     headers:{
                         Authorization: `Bearer ${token}`,
                     },

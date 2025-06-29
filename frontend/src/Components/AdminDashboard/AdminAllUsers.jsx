@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "./AdminAllUsers.css";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import EditUserModal from "../EditUserModal";
+import { BASE_API_URL } from "../config/api";
 
 function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
   const [searching, setSearching] = useState(false);
@@ -80,7 +81,7 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
     }
 
     try {
-      const res = await fetch(`http://localhost/admin/user/${id}`, {
+      const res = await fetch(`${BASE_API_URL}/admin/user/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -114,7 +115,7 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost/admin/dashboard", {
+      const res = await fetch(`${BASE_API_URL}/admin/dashboard`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -167,7 +168,7 @@ function AdminAllUsers({ allUsers = [], loading, setAllUsers }) {
 
       try {
         const res = await fetch(
-          `http://localhost/admin/search?keyword=${encodeURIComponent(
+          `${BASE_API_URL}/admin/search?keyword=${encodeURIComponent(
             keyword
           )}`,
           { headers: { Authorization: `Bearer ${token}` } }
