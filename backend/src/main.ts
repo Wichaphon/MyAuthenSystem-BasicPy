@@ -7,7 +7,7 @@ async function bootstrap() {
 
   //Enable CORS ให้frontดึงข้อมูลข้ามportได้
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:30001'],
+    origin: ['http://localhost:3000', 'http://localhost:30001', 'https://testing001.riverpark.app'],
     credentials: true,
   });
 
